@@ -8,26 +8,12 @@ xorg-xwayland     # X11 compatibility layer for Wayland
 # ── Terminal & Shell ────────────────────────────
 [terminal]
 foot              # Fast Wayland-native terminal
-kitty             # GPU-accelerated terminal
-alacritty         # Another GPU-accelerated terminal
 
 [editor]
 neovim            # Primary editor
-vim               # Fallback/lightweight editor
 
 [cli-tools]
-btop              # System monitor (htop alternative)
-fastfetch         # System info display
-ripgrep           # Fast recursive search (rg)
-plocate           # Fast file locator
-duf               # Disk usage (df alternative)
-pv                # Pipe progress viewer
-rsync             # File sync utility
-git               # Version control
 github-cli        # GitHub from the command line
-paru              # AUR helper
-yay               # AUR helper (alternative)
-navi              # Interactive cheatsheet tool
 
 # ── Input Method ────────────────────────────────
 [input-method]
@@ -39,49 +25,22 @@ fcitx5-hangul     # Korean input
 
 # ── Fonts ───────────────────────────────────────
 [fonts]
-noto-fonts        # Google Noto base fonts
-noto-fonts-cjk    # CJK (Chinese/Japanese/Korean) support
-noto-fonts-emoji  # Emoji support
-ttf-meslo-nerd    # Nerd Font patched Meslo (terminal icons)
-otf-font-awesome  # Icon font (waybar icons etc.)
-ttf-dejavu        # Classic readable font
-ttf-liberation    # Metric-compatible with Arial/Times/Courier
-ttf-opensans      # Clean sans-serif font
 
 # ── Audio ───────────────────────────────────────
 [audio]
-pipewire-alsa     # ALSA backend for PipeWire
-pipewire-pulse    # PulseAudio replacement via PipeWire
-wireplumber       # PipeWire session manager
-pavucontrol       # Volume control GUI
-pulsemixer        # TUI audio mixer
 
 # ── Bluetooth ──────────────────────────────────
 [bluetooth]
-bluez             # Bluetooth protocol stack
-bluez-utils       # Bluetooth CLI utilities
-bluetui           # TUI bluetooth manager
-overskride-bin    # GTK Bluetooth GUI (AUR)
 
 # ── Networking ─────────────────────────────────
 [network]
-networkmanager        # Network connection manager
-networkmanager-openvpn # OpenVPN plugin for NetworkManager
-openssh               # SSH client/server
 
 # ── Apps ───────────────────────────────────────
 [apps]
 firefox           # Web browser
-google-chrome     # Web browser (AUR)
-telegram-desktop  # Messaging
-vlc-plugins-all   # VLC media player (all plugins)
-dolphin           # File manager
-meld              # Visual diff/merge tool
-steam             # Gaming platform
-lutris            # Game manager/launcher
+mdfried
 
 # ── Dev Tools ──────────────────────────────────
 [dev]
-npm               # Node.js package manager
-python            # Python runtime
+npm
 claude-code       # Claude AI CLI tool

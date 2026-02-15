@@ -146,19 +146,28 @@ symlink_configs() {
     for dir in "$configs_dir"/*/; do
         local name
         name="$(basename "$dir")"
+        local source="${dir%/}"
         local target="$HOME/.config/$name"
 
         if [[ -L "$target" ]]; then
-            log "$name: symlink already exists"
+            local current
+            current="$(readlink -f "$target")"
+            if [[ "$current" == "$(readlink -f "$source")" ]]; then
+                log "$name: symlink already exists"
+            else
+                warn "$name: updating symlink (was pointing to $current)"
+                ln -snf "$source" "$target"
+                ok "$name: symlink updated"
+            fi
         elif [[ -e "$target" ]]; then
             local backup="$target.bak.$(date +%Y%m%d%H%M%S)"
             warn "$name: backing up existing config to $backup"
             mv "$target" "$backup"
-            ln -sf "$dir" "$target"
+            ln -sf "$source" "$target"
             ok "$name: symlinked (old config backed up)"
         else
             mkdir -p "$HOME/.config"
-            ln -sf "$dir" "$target"
+            ln -sf "$source" "$target"
             ok "$name: symlinked"
         fi
     done

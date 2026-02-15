@@ -75,18 +75,18 @@ input {
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Outputs
 // Remember to uncomment the node by removing "/-"!
-// HDMI-A-1: top monitor (upside)
-output "HDMI-A-1" {
+// DP-3: Dell monitor (top)
+output "DP-3" {
     mode "3840x2160@60.000"
     scale 1.5
     position x=0 y=0
 }
 
-// DP-1: bottom monitor (downside)
-output "DP-1" {
-    mode "3840x2160@59.997"
-    scale 1.5
-    position x=0 y=1440
+// eDP-1: laptop screen (bottom, centered)
+output "eDP-1" {
+    mode "1920x1200@59.950"
+    scale 1.4
+    position x=594 y=1440
 }
 
 // Settings that influence how windows are positioned and sized.
@@ -363,13 +363,13 @@ binds {
     Mod+Shift+Escape { show-hotkey-overlay; }
 
     // Mod+Shift+/ shows all configured keybindings in a floating overlay.
-    Mod+Shift+Slash hotkey-overlay-title="Show All Hotkeys" { spawn "foot" "--app-id=hotkey-overlay" "-o" "colors.alpha=0.75" "-o" "initial-window-size-chars=100x40" "-e" "/home/rixile/.local/bin/niri-hotkeys"; }
+    Mod+Shift+Slash hotkey-overlay-title="Show All Hotkeys" { spawn-sh "foot --app-id=hotkey-overlay -o colors.alpha=0.75 -o initial-window-size-chars=100x40 -e sh -c '$HOME/.local/bin/niri-hotkeys | less -R'"; }
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Open a Terminal: foot" { spawn "foot"; }
     Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Mod+Return hotkey-overlay-title="Open Noctalia Launcher" { spawn-sh "qs ipc -c noctalia-shell call launcher toggle"; }
-    Mod+B hotkey-overlay-title="Open Internet Browser" { spawn "google-chrome-stable"; }
+    Mod+B hotkey-overlay-title="Open Internet Browser" { spawn "firefox"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen" { spawn-sh "qs ipc -c noctalia-shell call lockScreen lock"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
