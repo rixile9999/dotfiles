@@ -211,6 +211,62 @@ symlink_local_bin() {
     done
 }
 
+# ── Symlink Claude Code configs ───────────────
+symlink_claude() {
+    printf "\n${BOLD}── Symlinking Claude Code configs ──${RESET}\n"
+
+    local claude_dir="$DOTFILES_DIR/.claude"
+
+    # CLAUDE.md → ~/CLAUDE.md
+    _symlink_file "$DOTFILES_DIR/CLAUDE.md" "$HOME/CLAUDE.md"
+
+    # .claude/agents/*.md
+    if [[ -d "$claude_dir/agents" ]]; then
+        mkdir -p "$HOME/.claude/agents"
+        for file in "$claude_dir"/agents/*.md; do
+            [[ ! -f "$file" ]] && continue
+            _symlink_file "$file" "$HOME/.claude/agents/$(basename "$file")"
+        done
+    fi
+
+    # .claude/commands/*.md
+    if [[ -d "$claude_dir/commands" ]]; then
+        mkdir -p "$HOME/.claude/commands"
+        for file in "$claude_dir"/commands/*.md; do
+            [[ ! -f "$file" ]] && continue
+            _symlink_file "$file" "$HOME/.claude/commands/$(basename "$file")"
+        done
+    fi
+}
+
+_symlink_file() {
+    local source="$1"
+    local target="$2"
+    local name
+    name="$(basename "$target")"
+
+    if [[ -L "$target" ]]; then
+        local current
+        current="$(readlink -f "$target")"
+        if [[ "$current" == "$(readlink -f "$source")" ]]; then
+            log "$name: symlink already exists"
+        else
+            warn "$name: updating symlink (was pointing to $current)"
+            ln -snf "$source" "$target"
+            ok "$name: symlink updated"
+        fi
+    elif [[ -e "$target" ]]; then
+        local backup="$target.bak.$(date +%Y%m%d%H%M%S)"
+        warn "$name: backing up existing file to $backup"
+        mv "$target" "$backup"
+        ln -sf "$source" "$target"
+        ok "$name: symlinked (old file backed up)"
+    else
+        ln -sf "$source" "$target"
+        ok "$name: symlinked"
+    fi
+}
+
 # ── Neovim plugin sync ─────────────────────────
 sync_neovim() {
     printf "\n${BOLD}── Neovim plugin sync ──${RESET}\n"
@@ -245,6 +301,7 @@ main() {
     if ! $DRY_RUN; then
         symlink_configs
         symlink_local_bin
+        symlink_claude
         sync_neovim
     else
         printf "\n${BOLD}── Symlink targets ──${RESET}\n"
@@ -254,6 +311,11 @@ main() {
         printf "\n${BOLD}── Local bin targets ──${RESET}\n"
         for file in "$DOTFILES_DIR/.local/bin"/*; do
             [[ -f "$file" ]] && ok "(dry-run) Would symlink: $(basename "$file") → ~/.local/bin/"
+        done
+        printf "\n${BOLD}── Claude Code targets ──${RESET}\n"
+        ok "(dry-run) Would symlink: CLAUDE.md → ~/CLAUDE.md"
+        for file in "$DOTFILES_DIR/.claude"/agents/*.md "$DOTFILES_DIR/.claude"/commands/*.md; do
+            [[ -f "$file" ]] && ok "(dry-run) Would symlink: $(basename "$file") → ~/.claude/..."
         done
         sync_neovim
     fi
