@@ -1,0 +1,109 @@
+#!/bin/bash
+# Parse niri keybinds.kdl and display all keybindings in a formatted view
+
+KEYBINDS_FILE="$HOME/.config/niri/config.kdl"
+
+if [[ ! -f "$KEYBINDS_FILE" ]]; then
+    echo "Keybinds file not found: $KEYBINDS_FILE"
+    exit 1
+fi
+
+awk '
+BEGIN {
+    BOLD    = "\033[1m"
+    DIM     = "\033[2m"
+    CYAN    = "\033[36m"
+    YELLOW  = "\033[33m"
+    GREEN   = "\033[32m"
+    RESET   = "\033[0m"
+    in_binds = 0
+    brace_depth = 0
+}
+
+# Detect start of binds block
+/^binds[[:space:]]*\{/ {
+    in_binds = 1
+    brace_depth = 1
+    next
+}
+
+!in_binds { next }
+
+# Track brace depth to know when binds block ends
+{
+    line = $0
+
+    # Count braces on this line (outside of strings)
+    tmp = line
+    gsub(/"[^"]*"/, "", tmp)
+    for (i = 1; i <= length(tmp); i++) {
+        c = substr(tmp, i, 1)
+        if (c == "{") brace_depth++
+        else if (c == "}") brace_depth--
+    }
+
+    if (brace_depth <= 0) {
+        in_binds = 0
+        next
+    }
+}
+
+# Skip comments and empty lines
+/^[[:space:]]*(\/\/|$)/ { next }
+
+# Parse keybinding lines
+{
+    line = $0
+    gsub(/^[[:space:]]+/, "", line)
+
+    # Extract key combo
+    match(line, /^[A-Za-z0-9+_]+/)
+    key = substr(line, RSTART, RLENGTH)
+    if (key == "") next
+
+    # Extract action from the last { } on the line
+    action = ""
+    if (match(line, /\{[[:space:]]*([^}]+)[[:space:]]*\}[[:space:]]*$/, arr)) {
+        action = arr[1]
+        gsub(/;[[:space:]]*$/, "", action)
+        gsub(/^[[:space:]]+|[[:space:]]+$/, "", action)
+    }
+    if (action == "") next
+
+    # Extract hotkey-overlay-title if present
+    title = ""
+    if (match(line, /hotkey-overlay-title="([^"]*)"/, arr)) {
+        title = arr[1]
+    }
+    # Skip if title is explicitly null
+    if (match(line, /hotkey-overlay-title=null/)) {
+        title = ""
+    }
+
+    # Clean up key display
+    display_key = key
+    gsub(/CTRL/, "Ctrl", display_key)
+    gsub(/ALT/, "Alt", display_key)
+    gsub(/UP/, "Up", display_key)
+    gsub(/ESCAPE/, "Esc", display_key)
+    gsub(/TAB/, "Tab", display_key)
+
+    # Clean up action display: use title if available, otherwise simplify
+    if (title != "") {
+        display_action = title
+    } else {
+        display_action = action
+        # Strip spawn/spawn-sh prefix and quotes for cleaner display
+        gsub(/^spawn-sh /, "", display_action)
+        gsub(/^spawn /, "", display_action)
+        gsub(/"/, "", display_action)
+        # Shorten noctalia IPC commands
+        gsub(/qs ipc -c noctalia-shell call /, "", display_action)
+    }
+
+    printf "  " YELLOW "%-32s" RESET GREEN " %s" RESET "\n", display_key, display_action
+}
+' "$KEYBINDS_FILE"
+
+echo ""
+echo -e " \033[2mPress q to close\033[0m"

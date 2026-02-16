@@ -173,6 +173,44 @@ symlink_configs() {
     done
 }
 
+# ── Symlink local bin scripts ──────────────────
+symlink_local_bin() {
+    printf "\n${BOLD}── Symlinking local bin scripts ──${RESET}\n"
+
+    local bin_dir="$DOTFILES_DIR/.local/bin"
+    [[ ! -d "$bin_dir" ]] && { warn "No .local/bin directory in dotfiles, skipping."; return; }
+
+    mkdir -p "$HOME/.local/bin"
+
+    for file in "$bin_dir"/*; do
+        [[ ! -f "$file" ]] && continue
+        local name
+        name="$(basename "$file")"
+        local target="$HOME/.local/bin/$name"
+
+        if [[ -L "$target" ]]; then
+            local current
+            current="$(readlink -f "$target")"
+            if [[ "$current" == "$(readlink -f "$file")" ]]; then
+                log "$name: symlink already exists"
+            else
+                warn "$name: updating symlink (was pointing to $current)"
+                ln -snf "$file" "$target"
+                ok "$name: symlink updated"
+            fi
+        elif [[ -e "$target" ]]; then
+            local backup="$target.bak.$(date +%Y%m%d%H%M%S)"
+            warn "$name: backing up existing file to $backup"
+            mv "$target" "$backup"
+            ln -sf "$file" "$target"
+            ok "$name: symlinked (old file backed up)"
+        else
+            ln -sf "$file" "$target"
+            ok "$name: symlinked"
+        fi
+    done
+}
+
 # ── Neovim plugin sync ─────────────────────────
 sync_neovim() {
     printf "\n${BOLD}── Neovim plugin sync ──${RESET}\n"
@@ -206,11 +244,16 @@ main() {
     install_packages
     if ! $DRY_RUN; then
         symlink_configs
+        symlink_local_bin
         sync_neovim
     else
         printf "\n${BOLD}── Symlink targets ──${RESET}\n"
         for dir in "$DOTFILES_DIR/.config"/*/; do
             [[ -d "$dir" ]] && ok "(dry-run) Would symlink: $(basename "$dir")"
+        done
+        printf "\n${BOLD}── Local bin targets ──${RESET}\n"
+        for file in "$DOTFILES_DIR/.local/bin"/*; do
+            [[ -f "$file" ]] && ok "(dry-run) Would symlink: $(basename "$file") → ~/.local/bin/"
         done
         sync_neovim
     fi

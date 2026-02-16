@@ -5,6 +5,7 @@ Linux environment configuration files.
 ## Contents
 
 - **niri** — Niri Wayland compositor config
+- **niri-hotkeys** — Keybinding viewer script for niri (`~/.local/bin`)
 - **neovim** — Neovim editor config
 
 ## Quick Start
@@ -21,7 +22,8 @@ bash setup.sh
 
 1. Installs packages from `packages.toml` (official repos + AUR)
 2. Symlinks configs from `.config/` to `~/.config/`
-3. Syncs Neovim plugins via Lazy.nvim
+3. Symlinks scripts from `.local/bin/` to `~/.local/bin/`
+4. Syncs Neovim plugins via Lazy.nvim
 
 ### Dry Run
 
@@ -42,4 +44,5 @@ If you prefer to symlink individually:
 ```bash
 ln -sf ~/dotfiles/.config/niri ~/.config/niri
 ln -sf ~/dotfiles/.config/nvim ~/.config/nvim
+ln -sf ~/dotfiles/.local/bin/niri-hotkeys ~/.local/bin/niri-hotkeys
 ```
