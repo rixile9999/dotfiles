@@ -4,6 +4,7 @@ Linux environment configuration files.
 
 ## Contents
 
+- **foot** — Foot terminal emulator config
 - **niri** — Niri Wayland compositor config
 - **niri-hotkeys** — Keybinding viewer script for niri (`~/.local/bin`)
 - **neovim** — Neovim editor config
@@ -42,6 +43,7 @@ Packages are defined in `packages.toml`, organized by category with inline comme
 If you prefer to symlink individually:
 
 ```bash
+ln -sf ~/dotfiles/.config/foot ~/.config/foot
 ln -sf ~/dotfiles/.config/niri ~/.config/niri
 ln -sf ~/dotfiles/.config/nvim ~/.config/nvim
 ln -sf ~/dotfiles/.local/bin/niri-hotkeys ~/.local/bin/niri-hotkeys
