@@ -237,6 +237,20 @@ symlink_claude() {
             _symlink_file "$file" "$HOME/.claude/commands/$(basename "$file")"
         done
     fi
+
+    # .claude/skills/*/SKILL.md
+    if [[ -d "$claude_dir/skills" ]]; then
+        for skill_dir in "$claude_dir"/skills/*/; do
+            [[ ! -d "$skill_dir" ]] && continue
+            local skill_name
+            skill_name="$(basename "$skill_dir")"
+            mkdir -p "$HOME/.claude/skills/$skill_name"
+            for file in "$skill_dir"*; do
+                [[ ! -f "$file" ]] && continue
+                _symlink_file "$file" "$HOME/.claude/skills/$skill_name/$(basename "$file")"
+            done
+        done
+    fi
 }
 
 _symlink_file() {
@@ -316,6 +330,9 @@ main() {
         ok "(dry-run) Would symlink: CLAUDE.md → ~/CLAUDE.md"
         for file in "$DOTFILES_DIR/.claude"/agents/*.md "$DOTFILES_DIR/.claude"/commands/*.md; do
             [[ -f "$file" ]] && ok "(dry-run) Would symlink: $(basename "$file") → ~/.claude/..."
+        done
+        for skill_dir in "$DOTFILES_DIR/.claude"/skills/*/; do
+            [[ -d "$skill_dir" ]] && ok "(dry-run) Would symlink skill: $(basename "$skill_dir") → ~/.claude/skills/"
         done
         sync_neovim
     fi
