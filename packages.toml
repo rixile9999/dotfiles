@@ -31,6 +31,7 @@ fcitx5-hangul     # Korean input
 
 # ── Bluetooth ──────────────────────────────────
 [bluetooth]
+overskride	 # Bluetooth manager written in Rust
 
 # ── Networking ─────────────────────────────────
 [network]
@@ -38,7 +39,7 @@ fcitx5-hangul     # Korean input
 # ── Apps ───────────────────────────────────────
 [apps]
 firefox           # Web browser
-mdfried
+mdfried		  # MD format renderer
 
 # ── Dev Tools ──────────────────────────────────
 [dev]
