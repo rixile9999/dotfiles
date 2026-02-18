@@ -1,0 +1,17 @@
+# Laptop + Dell external (DP-3 on top, eDP-1 on bottom centered)
+profile laptop-dell {
+    output DP-3 mode 3840x2160@60.000 scale 1.5 position 0,0
+    output eDP-1 mode 1920x1200@59.950 scale 1.4 position 594,1440
+}
+
+# Desktop dual LG 4K (HDMI-A-1 on top, DP-1 on bottom)
+# Scale 1.4 → logical height ≈ 1543, so DP-1 starts at y=1543
+profile desktop-dual-lg {
+    output HDMI-A-1 mode 3840x2160@60.000 scale 1.4 position 0,0
+    output DP-1 mode 3840x2160@59.997 scale 1.4 position 0,1543
+}
+
+# Laptop only (no external monitor)
+profile laptop-only {
+    output eDP-1 mode 1920x1200@59.950 scale 1.4 position 0,0
+}

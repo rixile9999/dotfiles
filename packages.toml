@@ -2,6 +2,7 @@
 [compositor]
 niri              # Scrollable tiling Wayland compositor
 noctalia-shell    # Desktop shell for Niri (bar, launcher, notifications, etc.)
+kanshi            # Dynamic output configuration for Wayland
 uwsm              # Universal Wayland session manager
 xorg-xwayland     # X11 compatibility layer for Wayland
 

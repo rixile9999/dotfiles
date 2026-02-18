@@ -71,26 +71,6 @@ input {
     focus-follows-mouse max-scroll-amount="0%"
 }
 
-// You can configure outputs by their name, which you can find
-// by running `niri msg outputs` while inside a niri instance.
-// The built-in laptop monitor is usually called "eDP-1".
-// Find more information on the wiki:
-// https://yalter.github.io/niri/Configuration:-Outputs
-// Remember to uncomment the node by removing "/-"!
-// DP-3: Dell monitor (top)
-output "DP-3" {
-    mode "3840x2160@60.000"
-    scale 1.5
-    position x=0 y=0
-}
-
-// eDP-1: laptop screen (bottom, centered)
-output "eDP-1" {
-    mode "1920x1200@59.950"
-    scale 1.4
-    position x=594 y=1440
-}
-
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Layout
@@ -262,6 +242,7 @@ environment {
 }
 
 spawn-at-startup "qs" "-c" "noctalia-shell"
+spawn-at-startup "kanshi"
 
 hotkey-overlay {
     // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
