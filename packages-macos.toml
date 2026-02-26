@@ -1,0 +1,22 @@
+# ── Terminal & Shell ────────────────────────────
+[terminal]
+wezterm
+
+[shell]
+pure                      # Minimal Zsh prompt
+zsh-autosuggestions       # Fish-like autosuggestions
+zsh-syntax-highlighting   # Fish-like syntax highlighting
+
+[editor]
+neovim            # Primary editor
+
+[cli-tools]
+gh                # GitHub from the command line
+
+# ── Dev Tools ──────────────────────────────────
+[dev]
+node
+
+# ── Casks ──────────────────────────────────────
+[casks]
+firefox           # Web browser
