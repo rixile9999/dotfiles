@@ -15,7 +15,7 @@ gh                # GitHub from the command line
 
 # ── Dev Tools ──────────────────────────────────
 [dev]
-node
+nvm
 
 # ── Casks ──────────────────────────────────────
 [casks]
