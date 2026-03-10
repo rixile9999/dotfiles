@@ -26,7 +26,6 @@ main() {
         symlink_configs
         symlink_home_dotfiles
         symlink_local_bin
-        symlink_claude
         sync_neovim
     else
         printf "\n${BOLD}── Symlink targets ──${RESET}\n"
@@ -71,14 +70,6 @@ main() {
                 fi
             fi
             ok "(dry-run) Would symlink: $bname → ~/.local/bin/"
-        done
-        printf "\n${BOLD}── Claude Code targets ──${RESET}\n"
-        ok "(dry-run) Would symlink: CLAUDE.md → ~/CLAUDE.md"
-        for file in "$DOTFILES_DIR/.claude"/agents/*.md "$DOTFILES_DIR/.claude"/commands/*.md; do
-            [[ -f "$file" ]] && ok "(dry-run) Would symlink: $(basename "$file") → ~/.claude/..."
-        done
-        for skill_dir in "$DOTFILES_DIR/.claude"/skills/*/; do
-            [[ -d "$skill_dir" ]] && ok "(dry-run) Would symlink skill: $(basename "$skill_dir") → ~/.claude/skills/"
         done
         sync_neovim
     fi
