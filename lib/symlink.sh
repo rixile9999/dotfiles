@@ -2,7 +2,7 @@
 
 LINUX_ONLY_CONFIGS="foot kanshi niri"
 LINUX_ONLY_BINS="niri-hotkeys"
-MACOS_ONLY_HOME_DOTFILES=".zshrc"
+MACOS_ONLY_HOME_DOTFILES=".zshrc .wezterm.lua"
 
 # ── Symlink configs ────────────────────────────
 symlink_configs() {
@@ -79,46 +79,4 @@ symlink_home_dotfiles() {
 
         _symlink_file "$source" "$HOME/$dotfile"
     done
-}
-
-# ── Symlink Claude Code configs ───────────────
-symlink_claude() {
-    printf "\n${BOLD}── Symlinking Claude Code configs ──${RESET}\n"
-
-    local claude_dir="$DOTFILES_DIR/.claude"
-
-    # CLAUDE.md -> ~/CLAUDE.md
-    _symlink_file "$DOTFILES_DIR/CLAUDE.md" "$HOME/CLAUDE.md"
-
-    # .claude/agents/*.md
-    if [[ -d "$claude_dir/agents" ]]; then
-        mkdir -p "$HOME/.claude/agents"
-        for file in "$claude_dir"/agents/*.md; do
-            [[ ! -f "$file" ]] && continue
-            _symlink_file "$file" "$HOME/.claude/agents/$(basename "$file")"
-        done
-    fi
-
-    # .claude/commands/*.md
-    if [[ -d "$claude_dir/commands" ]]; then
-        mkdir -p "$HOME/.claude/commands"
-        for file in "$claude_dir"/commands/*.md; do
-            [[ ! -f "$file" ]] && continue
-            _symlink_file "$file" "$HOME/.claude/commands/$(basename "$file")"
-        done
-    fi
-
-    # .claude/skills/*/SKILL.md
-    if [[ -d "$claude_dir/skills" ]]; then
-        for skill_dir in "$claude_dir"/skills/*/; do
-            [[ ! -d "$skill_dir" ]] && continue
-            local skill_name
-            skill_name="$(basename "$skill_dir")"
-            mkdir -p "$HOME/.claude/skills/$skill_name"
-            for file in "$skill_dir"*; do
-                [[ ! -f "$file" ]] && continue
-                _symlink_file "$file" "$HOME/.claude/skills/$skill_name/$(basename "$file")"
-            done
-        done
-    fi
 }
